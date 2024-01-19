@@ -1,14 +1,21 @@
 from crewai import Agent, Task, Crew, Process
-from langchain_google_genai import ChatGoogleGenerativeAI
+#from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_community.llms import Ollama # Use local Ollama model
 from langchain_community.tools import DuckDuckGoSearchRun
 from langchain.agents import Tool
 import gradio as gr
 
 # Set gemini pro as llm
-llm = ChatGoogleGenerativeAI(model="gemini-pro",
-                             verbose=True,
-                             temperature=0.5,
-                             google_api_key="")
+#llm = ChatGoogleGenerativeAI(model="gemini-pro",
+#                             verbose=True,
+#                             temperature=0.5,
+#                             google_api_key="")
+
+# Set Ollama as the LLM
+llm = Ollama(model="mistral",
+            base_url="http://192.168.42.99:11434",
+            verbose=True,
+            temperature=0.25)
 
 duckduckgo_search = DuckDuckGoSearchRun()
 
@@ -124,7 +131,7 @@ iface = gr.Interface(
     fn=run_crewai_app, 
     inputs=["text", "text", "text"], 
     outputs="text",
-    title="CrewAI Health,Nutriion and Fitness Analysis",
+    title="CrewAI Health, Nutrition and Fitness Analysis",
     description="Enter age, gender, and disease (or 'no' if there is no disease) to analyze fitness, nutrition, and health strategies."
 )
 
